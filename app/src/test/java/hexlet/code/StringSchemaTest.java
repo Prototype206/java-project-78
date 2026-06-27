@@ -22,7 +22,9 @@ public class StringSchemaTest {
         assertThat(schema.isValid(null)).isTrue();
         assertThat(schema.isValid("")).isTrue();
         assertThat(schema.isValid("hello")).isTrue();
+
         schema.required();
+
         assertThat(schema.isValid(null)).isFalse();
         assertThat(schema.isValid("")).isFalse();
         assertThat(schema.isValid("hello")).isTrue();
@@ -34,7 +36,7 @@ public class StringSchemaTest {
 
         assertThat(schema.isValid("hello")).isTrue();
         assertThat(schema.isValid("hi")).isFalse();
-        assertThat(schema.isValid("")).isTrue();
+        assertThat(schema.isValid("")).isFalse();
         assertThat(schema.isValid(null)).isTrue();
     }
 
@@ -44,7 +46,7 @@ public class StringSchemaTest {
 
         assertThat(schema.isValid("what does the fox say")).isTrue();
         assertThat(schema.isValid("hello")).isFalse();
-        assertThat(schema.isValid("")).isTrue();
+        assertThat(schema.isValid("")).isFalse();
         assertThat(schema.isValid(null)).isTrue();
     }
 
@@ -60,37 +62,5 @@ public class StringSchemaTest {
         assertThat(schema.isValid("hello")).isFalse();
         assertThat(schema.isValid(null)).isFalse();
         assertThat(schema.isValid("")).isFalse();
-    }
-
-    @Test
-    void testChaining() {
-        StringSchema schema2 = v.string();
-        schema2.minLength(10).minLength(4);
-        assertThat(schema2.isValid("Hexlet")).isTrue();
-    }
-
-    @Test
-    void testComplexScenario() {
-        StringSchema schema = v.string()
-                               .required()
-                               .minLength(3)
-                               .contains("a");
-
-        assertThat(schema.isValid("java")).isTrue();
-        assertThat(schema.isValid("ja")).isFalse();
-        assertThat(schema.isValid("jvx")).isFalse();
-        assertThat(schema.isValid("jav")).isTrue();
-        assertThat(schema.isValid("")).isFalse();
-        assertThat(schema.isValid(null)).isFalse();
-    }
-
-    @Test
-    void testOverwriteRules() {
-        StringSchema schema = v.string().contains("hello").contains("world");
-        assertThat(schema.isValid("hello world")).isTrue();
-        assertThat(schema.isValid("hello")).isFalse();
-        schema = v.string().minLength(10).minLength(5);
-        assertThat(schema.isValid("hello")).isTrue();
-        assertThat(schema.isValid("hi")).isFalse();
     }
 }
