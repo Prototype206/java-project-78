@@ -6,21 +6,30 @@ plugins {
 }
 
 group = "hexlet.code"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
+
+val junitVersion = "5.10.2"
+val assertjVersion = "3.25.3"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.2"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.assertj:assertj-core:3.25.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation("org.assertj:assertj-core:$assertjVersion")
 }
+
+
 
 tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
+}
+
+jacoco {
+    toolVersion = "0.8.11"
 }
 
 tasks.jacocoTestReport {
@@ -31,7 +40,7 @@ tasks.jacocoTestReport {
 }
 
 checkstyle {
-    toolVersion = "10.13.0"
+    toolVersion = "12.1.2"
     configFile = file("config/checkstyle/checkstyle.xml")
 }
 
