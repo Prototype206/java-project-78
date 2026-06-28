@@ -1,22 +1,22 @@
 .PHONY: setup build clean checkstyle test sonar jacoco
 
 setup:
-	cd app && chmod +x gradlew && java -jar gradle/wrapper/gradle-wrapper.jar clean build
+	cd app && chmod +x gradlew && ./gradlew clean build
 
 build:
-	cd app && ./gradlew build
+	cd app && chmod +x gradlew && ./gradlew build
 
 clean:
-	cd app && ./gradlew clean
+	cd app && chmod +x gradlew && ./gradlew clean
 
 checkstyle:
-	cd app && ./gradlew checkstyleMain checkstyleTest
+	cd app && chmod +x gradlew && ./gradlew checkstyleMain checkstyleTest
 
 test:
-	cd app && ./gradlew test
+	cd app && chmod +x gradlew && ./gradlew test
 
 sonar:
-	cd app && ./gradlew sonar
+	cd app && chmod +x gradlew && ./gradlew sonar
 
 jacoco:
-	cd app && ./gradlew jacocoTestReport
+	cd app && chmod +x gradlew && ./gradlew jacocoTestReport
