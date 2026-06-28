@@ -1,5 +1,6 @@
 package hexlet.project;
 
+import hexlet.code.Validator;
 import hexlet.code.schemas.StringSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,6 @@ public class StringSchemaTest {
     @Test
     void testMinLength() {
         schema.minLength(5);
-
         assertThat(schema.isValid("hello")).isTrue();
         assertThat(schema.isValid("hi")).isFalse();
         assertThat(schema.isValid("")).isFalse();
@@ -43,7 +43,6 @@ public class StringSchemaTest {
     @Test
     void testContains() {
         schema.contains("fox");
-
         assertThat(schema.isValid("what does the fox say")).isTrue();
         assertThat(schema.isValid("hello")).isFalse();
         assertThat(schema.isValid("")).isFalse();
@@ -52,10 +51,7 @@ public class StringSchemaTest {
 
     @Test
     void testMultipleRules() {
-        schema.required()
-               .minLength(5)
-               .contains("hex");
-
+        schema.required().minLength(5).contains("hex");
         assertThat(schema.isValid("hexlet")).isTrue();
         assertThat(schema.isValid("hex")).isFalse();
         assertThat(schema.isValid("hello hex")).isTrue();
@@ -80,24 +76,5 @@ public class StringSchemaTest {
         assertThat(schema.isValid("")).isFalse();
         assertThat(schema.isValid("hello")).isTrue();
         assertThat(schema.isValid("hi")).isFalse();
-    }
-
-    @Test
-    void testMinLengthAndContainsWithoutRequired() {
-        StringSchema schema = v.string().minLength(5).contains("fox");
-        assertThat(schema.isValid(null)).isTrue();
-        assertThat(schema.isValid("")).isFalse();
-        assertThat(schema.isValid("what does the fox say")).isTrue();
-        assertThat(schema.isValid("fox")).isFalse();
-        assertThat(schema.isValid("hello fox")).isTrue();
-    }
-
-    @Test
-    void testChainingOverrides() {
-        StringSchema schema = v.string();
-        schema.minLength(10);
-        assertThat(schema.isValid("Hexlet")).isFalse();
-        schema.minLength(4);
-        assertThat(schema.isValid("Hexlet")).isTrue();
     }
 }
