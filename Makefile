@@ -1,7 +1,7 @@
 .PHONY: setup build clean checkstyle test sonar jacoco
 
 setup:
-	cd app && chmod +x gradlew && ./gradlew clean build
+	cd app && chmod +x gradlew && java -jar gradle/wrapper/gradle-wrapper.jar clean build
 
 build:
 	cd app && ./gradlew build
