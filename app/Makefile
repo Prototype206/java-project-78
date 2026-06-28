@@ -18,7 +18,7 @@ checkstyle:
 
 test:
 	chmod +x gradlew
-	./gradlew test
+	./gradlew clean test
 
 sonar:
 	chmod +x gradlew
@@ -27,12 +27,3 @@ sonar:
 jacoco:
 	chmod +x gradlew
 	./gradlew jacocoTestReport
-
-win-run-dist:
-	.\build\install\app\bin\app
-
-win-checkstyle:
-	.\gradlew checkstyleMain checkstyleTest
-
-win-test:
-	.\gradlew test
