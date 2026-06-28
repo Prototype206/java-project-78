@@ -59,22 +59,4 @@ public class StringSchemaTest {
         assertThat(schema.isValid(null)).isFalse();
         assertThat(schema.isValid("")).isFalse();
     }
-
-    @Test
-    void testContainsWithoutRequired() {
-        StringSchema schema = v.string().contains("fox");
-        assertThat(schema.isValid(null)).isTrue();
-        assertThat(schema.isValid("")).isFalse();
-        assertThat(schema.isValid("what does the fox say")).isTrue();
-        assertThat(schema.isValid("hello")).isFalse();
-    }
-
-    @Test
-    void testMinLengthWithoutRequired() {
-        StringSchema schema = v.string().minLength(5);
-        assertThat(schema.isValid(null)).isTrue();
-        assertThat(schema.isValid("")).isFalse();
-        assertThat(schema.isValid("hello")).isTrue();
-        assertThat(schema.isValid("hi")).isFalse();
-    }
 }

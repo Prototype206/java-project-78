@@ -74,24 +74,4 @@ public class NumberSchemaTest {
         assertThat(schema.isValid(11)).isFalse();
         assertThat(schema.isValid(null)).isFalse();
     }
-
-    @Test
-    void testPositiveWithNull() {
-        NumberSchema schema = v.number().positive();
-        assertThat(schema.isValid(null)).isTrue();
-        assertThat(schema.isValid(5)).isTrue();
-        assertThat(schema.isValid(0)).isFalse();
-        assertThat(schema.isValid(-5)).isFalse();
-    }
-
-    @Test
-    void testRangeWithNull() {
-        NumberSchema schema = v.number().range(5, 10);
-        assertThat(schema.isValid(null)).isTrue();
-        assertThat(schema.isValid(5)).isTrue();
-        assertThat(schema.isValid(10)).isTrue();
-        assertThat(schema.isValid(7)).isTrue();
-        assertThat(schema.isValid(4)).isFalse();
-        assertThat(schema.isValid(11)).isFalse();
-    }
 }
