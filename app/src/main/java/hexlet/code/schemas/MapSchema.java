@@ -26,21 +26,17 @@ public class MapSchema extends BaseSchema<Map<String, Object>> {
         if (!isRequired && value == null) {
             return true;
         }
-
         if (isRequired && value == null) {
             return false;
         }
-
         if (size != null && value.size() != size) {
             return false;
         }
-
         if (schemas != null) {
             for (Map.Entry<String, BaseSchema<?>> entry : schemas.entrySet()) {
                 String key = entry.getKey();
                 BaseSchema<?> schema = entry.getValue();
                 Object fieldValue = value.get(key);
-
                 if (!schema.isValidValue(fieldValue)) {
                     return false;
                 }

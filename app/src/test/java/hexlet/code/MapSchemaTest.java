@@ -1,6 +1,7 @@
 package hexlet.code;
 
 import hexlet.code.schemas.MapSchema;
+import hexlet.code.schemas.BaseSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -101,5 +102,85 @@ public class MapSchemaTest {
         assertThat(schema.isValid(data)).isTrue();
         schema.sizeof(3);
         assertThat(schema.isValid(data)).isFalse();
+    }
+
+
+    @Test
+    void testShapeWithMissingKeys() {
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required());
+
+        schema.shape(schemas);
+
+        Map<String, Object> human = new HashMap<>();
+        human.put("firstName", "John");
+        assertThat(schema.isValid(human)).isFalse();
+    }
+
+    @Test
+    void testShapeWithNullValues() {
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required());
+
+        schema.shape(schemas);
+
+        Map<String, Object> human = new HashMap<>();
+        human.put("firstName", "John");
+        human.put("lastName", null);
+        assertThat(schema.isValid(human)).isFalse();
+    }
+
+    @Test
+    void testShapeWithOptionalFields() {
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string());
+
+        schema.shape(schemas);
+
+        Map<String, Object> human = new HashMap<>();
+        human.put("firstName", "John");
+        assertThat(schema.isValid(human)).isTrue();
+    }
+
+    @Test
+    void testShapeWithWrongTypes() {
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
+        schemas.put("age", v.number().required());
+
+        schema.shape(schemas);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("age", "twenty");
+        assertThat(schema.isValid(data)).isFalse();
+    }
+
+    @Test
+    void testShapeWithoutRequired() {
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
+        schemas.put("key", v.string().required());
+
+        schema.shape(schemas);
+
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid(new HashMap<>())).isFalse();
+    }
+
+    @Test
+    void testSizeofWithoutRequired() {
+        schema.sizeof(2);
+
+        assertThat(schema.isValid(null)).isTrue();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("key1", "value1");
+        data.put("key2", "value2");
+        assertThat(schema.isValid(data)).isTrue();
+
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("key1", "value1");
+        assertThat(schema.isValid(data2)).isFalse();
     }
 }

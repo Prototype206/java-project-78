@@ -63,4 +63,41 @@ public class StringSchemaTest {
         assertThat(schema.isValid(null)).isFalse();
         assertThat(schema.isValid("")).isFalse();
     }
+
+    @Test
+    void testContainsWithoutRequired() {
+        StringSchema schema = v.string().contains("fox");
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid("")).isFalse();
+        assertThat(schema.isValid("what does the fox say")).isTrue();
+        assertThat(schema.isValid("hello")).isFalse();
+    }
+
+    @Test
+    void testMinLengthWithoutRequired() {
+        StringSchema schema = v.string().minLength(5);
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid("")).isFalse();
+        assertThat(schema.isValid("hello")).isTrue();
+        assertThat(schema.isValid("hi")).isFalse();
+    }
+
+    @Test
+    void testMinLengthAndContainsWithoutRequired() {
+        StringSchema schema = v.string().minLength(5).contains("fox");
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid("")).isFalse();
+        assertThat(schema.isValid("what does the fox say")).isTrue();
+        assertThat(schema.isValid("fox")).isFalse();
+        assertThat(schema.isValid("hello fox")).isTrue();
+    }
+
+    @Test
+    void testChainingOverrides() {
+        StringSchema schema = v.string();
+        schema.minLength(10);
+        assertThat(schema.isValid("Hexlet")).isFalse();
+        schema.minLength(4);
+        assertThat(schema.isValid("Hexlet")).isTrue();
+    }
 }

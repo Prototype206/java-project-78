@@ -1,7 +1,5 @@
 package hexlet.code.schemas;
 
-import java.util.Objects;
-
 public class NumberSchema extends BaseSchema<Integer> {
     private Integer minRange = null;
     private Integer maxRange = null;
@@ -31,6 +29,7 @@ public class NumberSchema extends BaseSchema<Integer> {
         if (isRequired && value == null) {
             return false;
         }
+
         if (isPositive != null && value <= 0) {
             return false;
         }

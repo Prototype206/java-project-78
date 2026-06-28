@@ -3,6 +3,9 @@ package hexlet.code;
 import hexlet.code.Validator;
 import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.MapSchema;
+import hexlet.code.schemas.NumberSchema;
+import hexlet.code.schemas.StringSchema;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -135,5 +138,67 @@ public class ValidatorTest {
 
         Map<String, Object> actual4 = new HashMap<>();
         assertThat(schema.isValid(actual4)).isFalse();
+    }
+
+    @Test
+    void testShapeWithNestedMaps() {
+        Map<String, BaseSchema<?>> innerSchemas = new HashMap<>();
+        innerSchemas.put("street", v.string().required().minLength(3));
+        innerSchemas.put("city", v.string().required());
+
+        Map<String, BaseSchema<?>> outerSchemas = new HashMap<>();
+        outerSchemas.put("name", v.string().required());
+        outerSchemas.put("address", v.map().required().shape(innerSchemas));
+
+        schema.required().shape(outerSchemas);
+
+        Map<String, Object> address = new HashMap<>();
+        address.put("street", "Main St");
+        address.put("city", "New York");
+
+        Map<String, Object> person = new HashMap<>();
+        person.put("name", "John");
+        person.put("address", address);
+
+        assertThat(schema.isValid(person)).isTrue();
+
+        Map<String, Object> invalidAddress = new HashMap<>();
+        invalidAddress.put("street", "A");
+        invalidAddress.put("city", "Boston");
+
+        Map<String, Object> invalidPerson = new HashMap<>();
+        invalidPerson.put("name", "Jane");
+        invalidPerson.put("address", invalidAddress);
+
+        assertThat(schema.isValid(invalidPerson)).isFalse();
+    }
+
+    @Test
+    void testShapeWithCustomRules() {
+        StringSchema nameSchema = v.string().required().minLength(2).contains("A");
+        NumberSchema idSchema = v.number().required().positive();
+
+        assertThat(nameSchema.isValid("Alice")).isTrue();
+        assertThat(nameSchema.isValid("Bob")).isFalse();
+        assertThat(idSchema.isValid(123)).isTrue();
+        assertThat(idSchema.isValid(-5)).isFalse();
+
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
+        schemas.put("id", idSchema);
+        schemas.put("name", nameSchema);
+
+        schema.shape(schemas);
+
+        Map<String, Object> valid = new HashMap<>();
+        valid.put("id", 123);
+        valid.put("name", "Alice");
+
+        boolean result = schema.isValid(valid);
+        assertThat(result).isTrue();
+
+        Map<String, Object> invalid = new HashMap<>();
+        invalid.put("id", -5);
+        invalid.put("name", "Bob");
+        assertThat(schema.isValid(invalid)).isFalse();
     }
 }

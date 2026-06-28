@@ -4,6 +4,7 @@ import hexlet.code.schemas.NumberSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NumberSchemaTest {
@@ -101,5 +102,44 @@ public class NumberSchemaTest {
         NumberSchema schema2 = v.number().range(1, 5).range(10, 20);
         assertThat(schema2.isValid(15)).isTrue();
         assertThat(schema2.isValid(3)).isFalse();
+    }
+
+    @Test
+    void testPositiveWithNull() {
+        NumberSchema schema = v.number().positive();
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid(5)).isTrue();
+        assertThat(schema.isValid(0)).isFalse();
+        assertThat(schema.isValid(-5)).isFalse();
+    }
+
+    @Test
+    void testRangeWithNull() {
+        NumberSchema schema = v.number().range(5, 10);
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid(5)).isTrue();
+        assertThat(schema.isValid(10)).isTrue();
+        assertThat(schema.isValid(7)).isTrue();
+        assertThat(schema.isValid(4)).isFalse();
+        assertThat(schema.isValid(11)).isFalse();
+    }
+
+    @Test
+    void testChainingOverrides() {
+        NumberSchema schema = v.number();
+        schema.range(1, 5);
+        assertThat(schema.isValid(3)).isTrue();
+        assertThat(schema.isValid(10)).isFalse();
+        schema.range(10, 20);
+        assertThat(schema.isValid(3)).isFalse();
+        assertThat(schema.isValid(15)).isTrue();
+    }
+
+    @Test
+    void testPositiveWithoutRequired() {
+        NumberSchema schema = v.number().positive();
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid(5)).isTrue();
+        assertThat(schema.isValid(0)).isFalse();
     }
 }

@@ -7,6 +7,10 @@ public abstract class BaseSchema<T> {
 
     @SuppressWarnings("unchecked")
     public boolean isValidValue(Object value) {
+        if (value == null) {
+            return isValid(null);
+        }
+
         try {
             return isValid((T) value);
         } catch (ClassCastException e) {

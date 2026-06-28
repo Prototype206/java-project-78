@@ -1,7 +1,5 @@
 package hexlet.code.schemas;
 
-import java.util.Objects;
-
 public class StringSchema extends BaseSchema<String> {
     private Integer minLength = null;
     private String containsSubstring = null;
@@ -23,20 +21,20 @@ public class StringSchema extends BaseSchema<String> {
 
     @Override
     public boolean isValid(String value) {
-        if (isRequired && (value == null || value.isEmpty())) {
-            return false;
-        }
-        if (!isRequired && value == null) {
-            return true;
-        }
-        if (!isRequired && value.isEmpty()) {
-            if (minLength != null) {
+        if (isRequired) {
+            if (value == null || value.isEmpty()) {
                 return false;
             }
-            if (containsSubstring != null) {
+        } else {
+            if (value == null) {
+                return true;
+            }
+            if (value.isEmpty()) {
+                if (minLength == null && containsSubstring == null) {
+                    return true;
+                }
                 return false;
             }
-            return true;
         }
         if (minLength != null && value.length() < minLength) {
             return false;
