@@ -1,36 +1,31 @@
-.PHONY: build run-dist clean checkstyle test setup
-
-# Утилита для установки прав на gradlew
-define ensure_gradlew
-	@if [ -f gradlew ]; then chmod +x gradlew; fi
-endef
+.PHONY: build run-dist clean checkstyle test setup sonar jacoco
 
 setup:
-	$(call ensure_gradlew)
+	chmod +x gradlew
 	./gradlew clean build
 
 build:
-	$(call ensure_gradlew)
+	chmod +x gradlew
 	./gradlew build
 
 clean:
-	$(call ensure_gradlew)
+	chmod +x gradlew
 	./gradlew clean
 
 checkstyle:
-	$(call ensure_gradlew)
+	chmod +x gradlew
 	./gradlew checkstyleMain checkstyleTest
 
 test:
-	$(call ensure_gradlew)
+	chmod +x gradlew
 	./gradlew test
 
 sonar:
-	$(call ensure_gradlew)
+	chmod +x gradlew
 	./gradlew sonar
 
 jacoco:
-	$(call ensure_gradlew)
+	chmod +x gradlew
 	./gradlew jacocoTestReport
 
 win-run-dist:
