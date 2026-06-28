@@ -1,7 +1,8 @@
-.PHONY: build run-dist clean checkstyle test
+.PHONY: build run-dist clean checkstyle test setup
 
 setup:
-	chmod +x ./gradlew
+	chmod +x gradlew
+	./gradlew clean build
 
 build: setup
 	./gradlew build
@@ -17,13 +18,18 @@ checkstyle:
 
 test:
 	./gradlew test
-	
-	
+
+sonar:
+	./gradlew sonar
+
+jacoco:
+	./gradlew jacocoTestReport
+
 win-run-dist:
 	.\build\install\app\bin\app
-	
+
 win-checkstyle:
 	.\gradlew checkstyleMain checkstyleTest
-	
+
 win-test:
 	.\gradlew test
