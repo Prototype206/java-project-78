@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class MapSchema extends BaseSchema<Map<String, Object>> {
     private Integer size = null;
-    private Map<String, BaseSchema<Object>> schemas = null;
+    private Map<String, BaseSchema<?>> schemas = null;
 
     public MapSchema required() {
         isRequired = true;
@@ -16,7 +16,7 @@ public class MapSchema extends BaseSchema<Map<String, Object>> {
         return this;
     }
 
-    public MapSchema shape(Map<String, BaseSchema<Object>> schemas) {
+    public MapSchema shape(Map<String, BaseSchema<?>> schemas) {
         this.schemas = schemas;
         return this;
     }
@@ -36,12 +36,12 @@ public class MapSchema extends BaseSchema<Map<String, Object>> {
         }
 
         if (schemas != null) {
-            for (Map.Entry<String, BaseSchema<Object>> entry : schemas.entrySet()) {
+            for (Map.Entry<String, BaseSchema<?>> entry : schemas.entrySet()) {
                 String key = entry.getKey();
-                BaseSchema<Object> schema = entry.getValue();
+                BaseSchema<?> schema = entry.getValue();
                 Object fieldValue = value.get(key);
 
-                if (!schema.isValid(fieldValue)) {
+                if (!schema.isValidValue(fieldValue)) {
                     return false;
                 }
             }
