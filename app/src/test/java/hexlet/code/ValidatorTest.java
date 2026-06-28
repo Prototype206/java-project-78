@@ -1,5 +1,4 @@
-package hexlet.project;
-
+package hexlet.code;
 
 import hexlet.code.Validator;
 import hexlet.code.schemas.BaseSchema;
@@ -117,5 +116,24 @@ public class ValidatorTest {
         assertThat(schema.isValid(user2)).isFalse();
 
         assertThat(schema.isValid(null)).isFalse();
+    }
+
+    @Test
+    void testComplexMap() {
+        Map<String, Object> actual1 = Map.of("key", "value");
+        assertThat(schema.isValid(actual1)).isTrue();
+
+        Map<String, BaseSchema<?>> schemas = new HashMap<>();
+        schemas.put("key", v.string().required().minLength(3));
+        schema.shape(schemas);
+
+        Map<String, Object> actual2 = Map.of("key", "hello");
+        assertThat(schema.isValid(actual2)).isTrue();
+
+        Map<String, Object> actual3 = Map.of("key", "hi");
+        assertThat(schema.isValid(actual3)).isFalse();
+
+        Map<String, Object> actual4 = new HashMap<>();
+        assertThat(schema.isValid(actual4)).isFalse();
     }
 }
