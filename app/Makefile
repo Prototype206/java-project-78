@@ -27,3 +27,7 @@ sonar:
 jacoco:
 	chmod +x gradlew
 	./gradlew jacocoTestReport
+
+win-setup:
+	chmod +x gradlew
+	.\gradlew clean build

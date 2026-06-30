@@ -2,47 +2,40 @@ package hexlet.code.schemas;
 
 import java.util.Map;
 
-public class MapSchema extends BaseSchema<Map<String, Object>> {
-    private Integer size = null;
-    private Map<String, BaseSchema<?>> schemas = null;
+public class MapSchema extends BaseSchema<Map<?, ?>> {
 
     public MapSchema required() {
-        isRequired = true;
+        addCheck("required", value -> value != null);
         return this;
     }
 
     public MapSchema sizeof(int size) {
-        this.size = size;
+        addCheck("sizeof", value -> {
+            if (value == null) {
+                return true;
+            }
+            return value.size() == size;
+        });
         return this;
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public MapSchema shape(Map<String, BaseSchema<?>> schemas) {
-        this.schemas = schemas;
-        return this;
-    }
-
-    @Override
-    public boolean isValid(Map<String, Object> value) {
-        if (!isRequired && value == null) {
-            return true;
-        }
-        if (isRequired && value == null) {
-            return false;
-        }
-        if (size != null && value.size() != size) {
-            return false;
-        }
-        if (schemas != null) {
+        addCheck("shape", value -> {
+            if (value == null) {
+                return true;
+            }
             for (Map.Entry<String, BaseSchema<?>> entry : schemas.entrySet()) {
                 String key = entry.getKey();
-                BaseSchema<?> schema = entry.getValue();
-                Object fieldValue = value.get(key);
-                if (!schema.isValidValue(fieldValue)) {
+                BaseSchema schema = entry.getValue();
+                Object actualValue = value.get(key);
+
+                if (!schema.isValid(actualValue)) {
                     return false;
                 }
             }
-        }
-
-        return true;
+            return true;
+        });
+        return this;
     }
 }
