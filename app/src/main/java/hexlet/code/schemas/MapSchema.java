@@ -29,7 +29,7 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
                 BaseSchema<?> schema = entry.getValue();
                 Object actualValue = value.get(key);
 
-                if (!schema.isValid(actualValue)) {
+                if (!schema.isValidValue(actualValue)) {
                     return false;
                 }
             }

@@ -10,18 +10,20 @@ public abstract class BaseSchema<T> {
     protected void addCheck(String name, Predicate<T> validate) {
         checks.put(name, validate);
     }
-
-    @SuppressWarnings("unchecked")
-    public boolean isValid(Object value) {
+    public boolean isValid(T value) {
         for (Predicate<T> check : checks.values()) {
-            try {
-                if (!check.test((T) value)) {
-                    return false;
-                }
-            } catch (ClassCastException e) {
+            if (!check.test(value)) {
                 return false;
             }
         }
         return true;
+    }
+    @SuppressWarnings("unchecked")
+    public boolean isValidValue(Object value) {
+        try {
+            return isValid((T) value);
+        } catch (ClassCastException e) {
+            return false;
+        }
     }
 }
